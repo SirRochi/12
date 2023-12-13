@@ -7,7 +7,6 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-
     <!-- Altri elementi del layout -->
 
     <Button
@@ -17,7 +16,6 @@
         android:text="Imposta Durata"
         android:layout_marginTop="16dp"/>
 
-
     <TextView
         android:id="@+id/timeRemainingTextView"
         android:layout_width="163dp"
@@ -26,11 +24,16 @@
         android:text="Tempo rimanente: "
         android:visibility="invisible" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="298dp"
-        android:layout_height="185dp"
-        android:layout_gravity="center" />
+    <com.github.lzyzsd.circleprogress.CircleProgress
+        android:id="@+id/circleProgress"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        app:circle_progress="0"
+        app:circle_fill="#3498db"
+        app:circle_progress_color="#2c3e50"
+        app:circle_max="100"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/parkButton"
@@ -45,17 +48,12 @@
         android:layout_height="wrap_content"
         android:text="Show on Map" />
 
-
     <Button
         android:id="@+id/exitButton"
         android:layout_width="394dp"
         android:layout_height="91dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="start|bottom"
         android:backgroundTint="#FFFFFF"
         android:text="Exit"
         android:textColor="#FF0000" />
-
-
 </LinearLayout>

@@ -25,6 +25,8 @@ import kotlinx.coroutines.*
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import com.github.lzyzsd.circleprogress.CircleProgress
+
 
 class MainActivity : ComponentActivity() {
 
@@ -45,6 +47,13 @@ class MainActivity : ComponentActivity() {
 
         // Inizializzazione di endTimeTextView
         endTimeTextView = findViewById(R.id.timeRemainingTextView)
+
+        val setDurationButton: Button = findViewById(R.id.setDurationButton)
+
+        setDurationButton.setOnClickListener {
+            showTimePickerDialog()
+        }
+
 
 
         // Check if the device is running Android 11 or higher
@@ -101,6 +110,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             // Aggiorna la posizione corrente dell'utente
@@ -141,45 +151,48 @@ class MainActivity : ComponentActivity() {
         timePickerDialog.show()
     }
 
+
     private fun showDialogWithExplanation() {
         // Implementa il codice per mostrare una spiegazione al richiedere i permessi
     }
 
     private fun startTimer(durationMillis: Int) {
-        // Implementa il codice per avviare il timer con la durata selezionata
-        // Usa la variabile 'durationMillis' come la durata del timer
-
-        val progressBar: ProgressBar = findViewById(id.progressBar)
-        progressBar.visibility = View.VISIBLE
-
-        val endTimeTextView: TextView = findViewById(R.id.timeRemainingTextView)
-
-        endTimeTextView.visibility = View.VISIBLE
-        val timeRemainingTextView: TextView = findViewById(id.timeRemainingTextView)
-        timeRemainingTextView.visibility = View.VISIBLE // Rendi la TextView visibile
+        val circleProgress: CircleProgress = findViewById(R.id.circleProgress)
+        circleProgress.visibility = View.VISIBLE
 
         if (timer == null) {
-            endTimeMillis = System.currentTimeMillis() + durationMillis // Calcola l'orario di fine sosta
+            endTimeMillis = System.currentTimeMillis() + durationMillis
 
             timer = object : CountDownTimer(durationMillis.toLong(), 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    val progress = ((millisUntilFinished.toFloat() / durationMillis) * 100).toInt()
-
-                    // Calcola il tempo rimanente e aggiorna la TextView
-                    val remainingTime = formatTime(millisUntilFinished)
-                    timeRemainingTextView.text = "Tempo rimanente: $remainingTime"
-
-                    progressBar.progress = progress
+                    val progress = (((durationMillis - millisUntilFinished.toFloat()) / durationMillis) * 100).toInt()
+                    circleProgress.setProgress(progress)
                 }
 
                 override fun onFinish() {
-                    // Implementa le azioni quando il timer è scaduto
-                    progressBar.progress = 0
-                    progressBar.visibility = View.GONE
+                    circleProgress.setProgress(0)
+                    circleProgress.visibility = View.GONE
                     endTimeTextView.visibility = View.GONE
-                    timeRemainingTextView.visibility = View.GONE // Nascondi la TextView quando il timer è scaduto
+                    timeRemainingTextView.visibility = View.GONE
                 }
             }.start()
+        }
+    }
+
+
+    override fun onTick(millisUntilFinished: Long) {
+        val progress = (((durationMillis - millisUntilFinished.toFloat()) / durationMillis) * 100).toInt()
+
+        // Calcola il tempo rimanente e aggiorna la TextView
+        val remainingTime = formatTime(millisUntilFinished)
+        timeRemainingTextView.text = "Tempo rimanente: $remainingTime"
+
+        // Aggiorna la ProgressBar con il progresso calcolato
+        progressBar.progress = progress
+    }
+
+
+
         }
     }
 
