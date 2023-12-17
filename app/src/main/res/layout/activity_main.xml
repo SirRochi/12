@@ -24,17 +24,6 @@
         android:text="Tempo rimanente: "
         android:visibility="invisible" />
 
-    <com.github.lzyzsd.circleprogress.CircleProgress
-        android:id="@+id/circleProgress"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        app:circle_progress="0"
-        app:circle_fill="#3498db"
-        app:circle_progress_color="#2c3e50"
-        app:circle_max="100"
-        android:visibility="invisible" />
-
     <Button
         android:id="@+id/parkButton"
         android:layout_width="wrap_content"

@@ -4,28 +4,22 @@ package com.example.a1012
 
 
 import android.app.TimePickerDialog
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.widget.Button
-import android.widget.TextView
-import androidx.activity.ComponentActivity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.view.WindowInsetsController
-import android.widget.ProgressBar
+import android.widget.Button
+import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.a1012.R.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
 import java.util.Calendar
-import java.util.Locale
-import java.util.concurrent.TimeUnit
-import com.github.lzyzsd.circleprogress.CircleProgress
 
 
 class MainActivity : ComponentActivity() {
@@ -53,7 +47,6 @@ class MainActivity : ComponentActivity() {
         setDurationButton.setOnClickListener {
             showTimePickerDialog()
         }
-
 
 
         // Check if the device is running Android 11 or higher
@@ -157,55 +150,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startTimer(durationMillis: Int) {
-        val circleProgress: CircleProgress = findViewById(R.id.circleProgress)
-        circleProgress.visibility = View.VISIBLE
-
         if (timer == null) {
             endTimeMillis = System.currentTimeMillis() + durationMillis
 
             timer = object : CountDownTimer(durationMillis.toLong(), 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    val progress = (((durationMillis - millisUntilFinished.toFloat()) / durationMillis) * 100).toInt()
-                    circleProgress.setProgress(progress)
+                    // Handle the ticking logic if needed
                 }
 
                 override fun onFinish() {
-                    circleProgress.setProgress(0)
-                    circleProgress.visibility = View.GONE
-                    endTimeTextView.visibility = View.GONE
-                    timeRemainingTextView.visibility = View.GONE
+                    // Handle the timer finish logic if needed
                 }
             }.start()
         }
-    }
-
-
-    override fun onTick(millisUntilFinished: Long) {
-        val progress = (((durationMillis - millisUntilFinished.toFloat()) / durationMillis) * 100).toInt()
-
-        // Calcola il tempo rimanente e aggiorna la TextView
-        val remainingTime = formatTime(millisUntilFinished)
-        timeRemainingTextView.text = "Tempo rimanente: $remainingTime"
-
-        // Aggiorna la ProgressBar con il progresso calcolato
-        progressBar.progress = progress
-    }
-
-
-
-        }
-    }
-
-    private fun formatTime(millis: Long): String {
-        val hours = TimeUnit.MILLISECONDS.toHours(millis)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis - TimeUnit.HOURS.toMillis(hours))
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes))
-        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
-    }
-
-    override fun onDestroy() {
-        timer?.cancel() // Cancella il timer se è attivo
-        lifecycleScope.cancel()
-        super.onDestroy()
     }
 }
