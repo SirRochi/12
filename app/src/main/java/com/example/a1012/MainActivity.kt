@@ -1,8 +1,5 @@
 package com.example.a1012
 
-// MainActivity.kt
-
-
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -20,7 +17,8 @@ import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.MainScope
 import java.util.Calendar
-
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
 
@@ -29,17 +27,17 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationManager: LocationManager
     private var parkedLocation: Location? = null
     private var timer: CountDownTimer? = null
-    private val durationMillis: Long = 30 * 60 * 1000 // 30 minuti
+    private val durationMillis: Long = 30 * 60 * 1000 // 30 minutes
     private val LOCATION_PERMISSION_REQUEST_CODE = 0
     private val mainScope = MainScope()
     private var endTimeMillis: Long = 0
-    private lateinit var endTimeTextView: TextView // Dichiarazione di endTimeTextView
+    private lateinit var endTimeTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inizializzazione di endTimeTextView
+        // Initialization of endTimeTextView
         endTimeTextView = findViewById(R.id.timeRemainingTextView)
 
         val setDurationButton: Button = findViewById(R.id.setDurationButton)
@@ -47,7 +45,6 @@ class MainActivity : ComponentActivity() {
         setDurationButton.setOnClickListener {
             showTimePickerDialog()
         }
-
 
         // Check if the device is running Android 11 or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -61,20 +58,20 @@ class MainActivity : ComponentActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_VISIBLE
         }
 
-        // Inizializza le altre variabili
+        // Initialize other variables
         parkButton = findViewById(R.id.parkButton)
         exitButton = findViewById(R.id.exitButton)
 
-        // Inizializza il LocationManager
+        // Initialize the LocationManager
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        // Richiedi i permessi di ACCESS_FINE_LOCATION, assicurati di avere il permesso nel manifest
+        // Request ACCESS_FINE_LOCATION permissions, make sure to have the permission in the manifest
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Aggiungi il listener per ottenere gli aggiornamenti sulla posizione
+            // Add listener to get location updates
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 0L,
@@ -82,18 +79,18 @@ class MainActivity : ComponentActivity() {
                 locationListener
             )
         } else {
-            // Richiedi i permessi se non sono già concessi
+            // Request permissions if not already granted
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     android.Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                // Spiega all'utente perché stai richiedendo il permesso
-                // Puoi utilizzare un AlertDialog o un'altra forma di messaggio
-                // per fornire una spiegazione più descrittiva.
+                // Explain to the user why you need the permission
+                // You can use an AlertDialog or another form of message
+                // to provide a more descriptive explanation.
                 showDialogWithExplanation()
             } else {
-                // Richiedi i permessi
+                // Request permissions
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -103,10 +100,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            // Aggiorna la posizione corrente dell'utente
+            // Update the current location of the user
             val latitude = location.latitude
             val longitude = location.longitude
         }
@@ -132,7 +128,7 @@ class MainActivity : ComponentActivity() {
         val timePickerDialog = TimePickerDialog(
             this,
             { _, hourOfDay, minute ->
-                // Calcola la durata in millisecondi
+                // Calculate the duration in milliseconds
                 val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
                 startTimer(selectedDuration)
             },
@@ -144,9 +140,8 @@ class MainActivity : ComponentActivity() {
         timePickerDialog.show()
     }
 
-
     private fun showDialogWithExplanation() {
-        // Implementa il codice per mostrare una spiegazione al richiedere i permessi
+        // Implement the code to show an explanation when requesting permissions
     }
 
     private fun startTimer(durationMillis: Int) {
@@ -163,5 +158,17 @@ class MainActivity : ComponentActivity() {
                 }
             }.start()
         }
+    }
+    private fun updateUIWithRemainingTime(millisUntilFinished: Long) {
+        val remainingTime = formatTime(millisUntilFinished)
+        endTimeTextView.text = "Time Remaining: $remainingTime"
+    }
+
+    private fun formatTime(millis: Long): String {
+        val hours = TimeUnit.MILLISECONDS.toHours(millis)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis - TimeUnit.HOURS.toMillis(hours))
+        val seconds =
+            TimeUnit.MILLISECONDS.toSeconds(millis - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes))
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
