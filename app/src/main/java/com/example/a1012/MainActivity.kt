@@ -119,26 +119,41 @@ class MainActivity : ComponentActivity() {
             // Called when the user disables the location provider
         }
     }
+//pilsante durata
+private fun showTimePickerDialog() {
+    val calendar = Calendar.getInstance()
+    val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+    val currentMinute = calendar.get(Calendar.MINUTE)
 
-    private fun showTimePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
+    val setDurationButton: Button = findViewById(R.id.setDurationButton)
+    val endTimeTextView: TextView = findViewById(R.id.timeRemainingTextView)
 
-        val timePickerDialog = TimePickerDialog(
-            this,
-            { _, hourOfDay, minute ->
-                // Calculate the duration in milliseconds
-                val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
-                startTimer(selectedDuration)
-            },
-            currentHour,
-            currentMinute,
-            true
-        )
+    val timePickerDialog = TimePickerDialog(
+        this,
+        { _, hourOfDay, minute ->
+            // Calcola la durata in millisecondi
+            val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
+            // Aggiorna endTimeMillis con il timestamp dell'ora di sosta selezionata
+            endTimeMillis = System.currentTimeMillis() + selectedDuration
+            // Avvia il timer
+            startTimer(selectedDuration)
 
-        timePickerDialog.show()
-    }
+            // Aggiorna il testo del pulsante con l'orario selezionato
+            val buttonText = String.format(Locale.getDefault(), "Durata: %02d:%02d", hourOfDay, minute)
+            setDurationButton.text = buttonText
+
+            // Aggiorna endTimeTextView con l'orario selezionato
+            val endTimeText = String.format(Locale.getDefault(), "Tempo rimanente: %02d:%02d", hourOfDay, minute)
+            endTimeTextView.text = endTimeText
+            endTimeTextView.visibility = View.VISIBLE
+        },
+        currentHour,
+        currentMinute,
+        true
+    )
+
+    timePickerDialog.show()
+}
 
     private fun showDialogWithExplanation() {
         // Implement the code to show an explanation when requesting permissions
@@ -154,14 +169,20 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onFinish() {
-                    // Handle the timer finish logic if needed
+                    // Nascondi la textView del tempo rimanente
+                    endTimeTextView.visibility = View.INVISIBLE
+                    // Resetta endTimeMillis
+                    endTimeMillis = 0
                 }
             }.start()
         }
     }
     private fun updateUIWithRemainingTime(millisUntilFinished: Long) {
-        val remainingTime = formatTime(millisUntilFinished)
-        endTimeTextView.text = "Time Remaining: $remainingTime"
+        if (endTimeMillis > 0) {
+            val remainingTime = formatTime(millisUntilFinished)
+            endTimeTextView.text = "Tempo rimanente: $remainingTime"
+            endTimeTextView.visibility = View.VISIBLE
+        }
     }
 
     private fun formatTime(millis: Long): String {
