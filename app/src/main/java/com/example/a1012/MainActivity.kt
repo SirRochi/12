@@ -165,7 +165,7 @@ private fun showTimePickerDialog() {
 
             timer = object : CountDownTimer(durationMillis.toLong(), 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    // Handle the ticking logic if needed
+                    updateUIWithRemainingTime(millisUntilFinished)
                 }
 
                 override fun onFinish() {
