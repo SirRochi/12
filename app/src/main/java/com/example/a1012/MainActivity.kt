@@ -12,6 +12,7 @@ import android.os.CountDownTimer
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
@@ -127,6 +128,9 @@ private fun showTimePickerDialog() {
 
     val setDurationButton: Button = findViewById(R.id.setDurationButton)
     val endTimeTextView: TextView = findViewById(R.id.timeRemainingTextView)
+    val formatCheckBox: CheckBox = findViewById(R.id.formatCheckBox)
+
+    val is24HourFormat = formatCheckBox.isChecked
 
     val timePickerDialog = TimePickerDialog(
         this,
@@ -149,7 +153,7 @@ private fun showTimePickerDialog() {
         },
         currentHour,
         currentMinute,
-        true
+        is24HourFormat
     )
 
     timePickerDialog.show()

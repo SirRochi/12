@@ -16,6 +16,13 @@
         android:text="Imposta Durata"
         android:layout_marginTop="16dp"/>
 
+    <CheckBox
+        android:id="@+id/formatCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Formato 24 ore"
+        android:checked="true" />
+
     <TextView
         android:id="@+id/timeRemainingTextView"
         android:layout_width="163dp"
