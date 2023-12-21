@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
     private val mainScope = MainScope()
     private var endTimeMillis: Long = 0
     private lateinit var endTimeTextView: TextView
-
+    private var selectedHourOfDay: Int = 0
+    private var selectedMinute: Int = 0
 
 
 
@@ -52,11 +53,15 @@ class MainActivity : ComponentActivity() {
         parkButton = findViewById(R.id.parkButton)
         exitButton = findViewById(R.id.exitButton)
 
+
         val durationButton: Button = findViewById(R.id.setDurationButton)
+
 
         durationButton.setOnClickListener {
             showTimePickerDialog()
+
         }
+
 
         exitButton.setOnClickListener {
             finish()
@@ -69,7 +74,10 @@ class MainActivity : ComponentActivity() {
         initializeViews()
         initializeLocationManager()
 
-        // Corretta posizione di parkButton.setOnClickListener
+
+
+
+        // Corretta posizione di PARK BOTTON.setOnClickListener
         parkButton.setOnClickListener {
             // Controlla se è stata concessa l'autorizzazione alla posizione
             if (ActivityCompat.checkSelfPermission(
@@ -78,15 +86,18 @@ class MainActivity : ComponentActivity() {
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 // Ottieni l'ultima posizione conosciuta
-                val lastKnownLocation =
-                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
                 if (lastKnownLocation != null) {
-                    // Salva la posizione su Google Maps (apre Google Maps con la posizione di parcheggio)
-                    saveLocationOnGoogleMaps(lastKnownLocation.latitude, lastKnownLocation.longitude)
+                    // Salva la posizione senza aprire Google Maps
+                    saveLocationWithoutOpeningMap(lastKnownLocation.latitude, lastKnownLocation.longitude)
 
-                    // Avvia il timer con una durata predefinita (es. 30 minuti)
-                    startTimer(durationMillis.toInt())
+
+                    // Avvia il timer con una durata predefinita
+                    Log.d("MainActivity", "Before startTimer call")
+                    startTimer(selectedHourOfDay * 60 * 60 * 1000 + selectedMinute * 60 * 1000)
+                    Log.d("MainActivity", "After startTimer call")
+
                 } else {
                     // Gestisci il caso in cui l'ultima posizione conosciuta non è disponibile
                     Toast.makeText(
@@ -95,27 +106,56 @@ class MainActivity : ComponentActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
             } else {
                 // Richiedi le autorizzazioni di posizione se non sono già state concesse
-                // (potresti voler gestire la spiegazione e la richiesta di autorizzazione come nel tuo codice esistente)
-            }
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE )           }
         }
+
+    }
+    private fun saveLocationWithoutOpeningMap(latitude: Double, longitude: Double) {
+        // Implementa la logica per salvare la posizione della macchina senza aprire nulla
+        // Puoi memorizzare la latitudine e la longitudine in una variabile o persistere secondo necessità
+        parkedLocation = Location("PosizioneParcheggio")
+        parkedLocation!!.latitude = latitude
+        parkedLocation!!.longitude = longitude
+
+        // Puoi anche eseguire altre azioni necessarie relative al salvataggio della posizione
     }
 
-    private fun showOnMap() {
+
+    private fun showLocationOnMap() {
         if (parkedLocation != null) {
-            // Se la posizione di parcheggio è disponibile, apri Google Maps con la posizione
-            saveLocationOnGoogleMaps(parkedLocation!!.latitude, parkedLocation!!.longitude)
+            val latitude = parkedLocation!!.latitude
+            val longitude = parkedLocation!!.longitude
+            val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(Parking Location)")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            } else {
+                // Handle the case where Google Maps is not installed on the device
+                Toast.makeText(
+                    this,
+                    "Google Maps is not installed on your device. Install Google Maps to use this feature.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         } else {
-            // Se la posizione di parcheggio non è disponibile, mostra un messaggio all'utente
+            // Handle the case where the location is not saved
             Toast.makeText(
                 this,
-                "Posizione di parcheggio non disponibile. Parcheggia prima di utilizzare questa opzione.",
+                "Location not saved. Please park your car first.",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
+
+
+
 
     private fun configureSystemBarsAppearance() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -194,44 +234,49 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     // Bottone della durata
-private fun showTimePickerDialog() {
-    val calendar = Calendar.getInstance()
-    val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-    val currentMinute = calendar.get(Calendar.MINUTE)
+    private fun showTimePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
 
-    val setDurationButton: Button = findViewById(R.id.setDurationButton)
-    val endTimeTextView: TextView = findViewById(R.id.timeRemainingTextView)
-    val formatCheckBox: CheckBox = findViewById(R.id.formatCheckBox)
+        val setDurationButton: Button = findViewById(R.id.setDurationButton)
+        val endTimeTextView: TextView = findViewById(R.id.timeRemainingTextView)
+        val formatCheckBox: CheckBox = findViewById(R.id.formatCheckBox)
 
-    val is24HourFormat = formatCheckBox.isChecked
+        val is24HourFormat = formatCheckBox.isChecked
 
-    val timePickerDialog = TimePickerDialog(
-        this,
-        { _, hourOfDay, minute ->
-            // Calcola la durata in millisecondi
-            val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
-            // Aggiorna endTimeMillis con il timestamp dell'ora di sosta selezionata
-            endTimeMillis = System.currentTimeMillis() + selectedDuration
-            // Avvia il timer
-            startTimer(selectedDuration)
+        val timePickerDialog = TimePickerDialog(
+            this,
+            { _, hourOfDay, minute ->
+                // Calcola la durata in millisecondi
+                val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
 
-            // Aggiorna il testo del pulsante con l'orario selezionato
-            val buttonText = String.format(Locale.getDefault(), "Durata: %02d:%02d", hourOfDay, minute)
-            setDurationButton.text = buttonText
+                // Aggiorna il testo del pulsante con l'orario selezionato
+                val buttonText = String.format(Locale.getDefault(), "Durata: %02d:%02d", hourOfDay, minute)
+                setDurationButton.text = buttonText
 
-            // Aggiorna endTimeTextView con l'orario selezionato
-            val endTimeText = String.format(Locale.getDefault(), "Tempo rimanente: %02d:%02d", hourOfDay, minute)
-            endTimeTextView.text = endTimeText
-            endTimeTextView.visibility = View.VISIBLE
-        },
-        currentHour,
-        currentMinute,
-        is24HourFormat
-    )
+                // Aggiorna endTimeTextView con l'orario selezionato
+                val endTimeText = String.format(Locale.getDefault(), "Tempo rimanente: %02d:%02d", hourOfDay, minute)
+                endTimeTextView.text = endTimeText
+                endTimeTextView.visibility = View.VISIBLE
 
-    timePickerDialog.show()
-}
+                // Store the selected time
+                selectedHourOfDay = hourOfDay
+                selectedMinute = minute
+            },
+            currentHour,
+            currentMinute,
+            is24HourFormat
+        )
+
+        // Imposta il titolo per i minuti
+        timePickerDialog.setTitle("Seleziona Orario")
+
+        timePickerDialog.show()
+    }
+
 
     private fun showDialogWithExplanation() {
         // Implement the code to show an explanation when requesting permissions
@@ -271,20 +316,4 @@ private fun showTimePickerDialog() {
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
-    private fun saveLocationOnGoogleMaps(latitude: Double, longitude: Double) {
-        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(Parking Location)")
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-        mapIntent.setPackage("com.google.android.apps.maps")
-
-        if (mapIntent.resolveActivity(packageManager) != null) {
-            startActivity(mapIntent)
-        } else {
-            // Gestisce il caso in cui Google Maps non è installato sul dispositivo
-            Toast.makeText(
-                this,
-                "Google Maps non è installato sul tuo dispositivo. Installa Google Maps per utilizzare questa funzione.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
 }
