@@ -2,10 +2,12 @@ package com.example.a1012
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,6 +16,7 @@ import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.MainScope
@@ -34,45 +37,94 @@ class MainActivity : ComponentActivity() {
     private var endTimeMillis: Long = 0
     private lateinit var endTimeTextView: TextView
 
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialization of endTimeTextView
+        // Inizializzazione di endTimeTextView
         endTimeTextView = findViewById(R.id.timeRemainingTextView)
 
-        val setDurationButton: Button = findViewById(R.id.setDurationButton)
+        parkButton = findViewById(R.id.parkButton)
+        exitButton = findViewById(R.id.exitButton)
 
-        setDurationButton.setOnClickListener {
+        val durationButton: Button = findViewById(R.id.setDurationButton)
+
+        durationButton.setOnClickListener {
             showTimePickerDialog()
         }
 
-        // Check if the device is running Android 11 or higher
+        // Controlla se il dispositivo esegue Android 11 o versioni successive
+        configureSystemBarsAppearance()
+
+        // Inizializza le altre variabili
+        initializeViews()
+        initializeLocationManager()
+
+        // Corretta posizione di parkButton.setOnClickListener
+        parkButton.setOnClickListener {
+            // Controlla se è stata concessa l'autorizzazione alla posizione
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                // Ottieni l'ultima posizione conosciuta
+                val lastKnownLocation =
+                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+                if (lastKnownLocation != null) {
+                    // Salva la posizione su Google Maps (apre Google Maps con la posizione di parcheggio)
+                    saveLocationOnGoogleMaps(lastKnownLocation.latitude, lastKnownLocation.longitude)
+
+                    // Avvia il timer con una durata predefinita (es. 30 minuti)
+                    startTimer(durationMillis.toInt())
+                } else {
+                    // Gestisci il caso in cui l'ultima posizione conosciuta non è disponibile
+                    Toast.makeText(
+                        this,
+                        "Impossibile recuperare la posizione attuale. Riprova più tardi.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                // Richiedi le autorizzazioni di posizione se non sono già state concesse
+                // (potresti voler gestire la spiegazione e la richiesta di autorizzazione come nel tuo codice esistente)
+            }
+        }
+    }
+
+    private fun configureSystemBarsAppearance() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(
                 0,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
         } else {
-            // For devices below Android 11
+            // Per dispositivi precedenti ad Android 11
             window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_VISIBLE
         }
+    }
 
-        // Initialize other variables
+    private fun initializeViews() {
         parkButton = findViewById(R.id.parkButton)
         exitButton = findViewById(R.id.exitButton)
+    }
 
-        // Initialize the LocationManager
+    private fun initializeLocationManager() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        // Request ACCESS_FINE_LOCATION permissions, make sure to have the permission in the manifest
+        // Richiedi le autorizzazioni ACCESS_FINE_LOCATION, assicurati di avere l'autorizzazione nel manifesto
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Add listener to get location updates
+            // Aggiungi un listener per ottenere gli aggiornamenti sulla posizione
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 0L,
@@ -80,47 +132,48 @@ class MainActivity : ComponentActivity() {
                 locationListener
             )
         } else {
-            // Request permissions if not already granted
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                // Explain to the user why you need the permission
-                // You can use an AlertDialog or another form of message
-                // to provide a more descriptive explanation.
-                showDialogWithExplanation()
-            } else {
-                // Request permissions
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-            }
+            handleLocationPermissionRequest()
+        }
+    }
+
+    private fun handleLocationPermissionRequest() {
+        // Richiedi le autorizzazioni se non sono già state concesse
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            showDialogWithExplanation()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            // Update the current location of the user
+            // Aggiorna la posizione attuale dell'utente
             val latitude = location.latitude
             val longitude = location.longitude
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-            // Handle status changes if needed
+            // Gestisci i cambiamenti di stato se necessario
         }
 
         override fun onProviderEnabled(provider: String) {
-            // Called when the user enables the location provider
+            // Chiamato quando l'utente abilita il provider della posizione
         }
 
         override fun onProviderDisabled(provider: String) {
-            // Called when the user disables the location provider
+            // Chiamato quando l'utente disabilita il provider della posizione
         }
     }
-//pilsante durata
+
+    // Bottone della durata
 private fun showTimePickerDialog() {
     val calendar = Calendar.getInstance()
     val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -195,5 +248,22 @@ private fun showTimePickerDialog() {
         val seconds =
             TimeUnit.MILLISECONDS.toSeconds(millis - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes))
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    private fun saveLocationOnGoogleMaps(latitude: Double, longitude: Double) {
+        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude(Parking Location)")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        if (mapIntent.resolveActivity(packageManager) != null) {
+            startActivity(mapIntent)
+        } else {
+            // Handle the case where Google Maps is not installed on the device
+            Toast.makeText(
+                this,
+                "Google Maps is not installed on your device. Please install Google Maps to use this feature.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
