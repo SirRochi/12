@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.Button
@@ -57,6 +58,10 @@ class MainActivity : ComponentActivity() {
             showTimePickerDialog()
         }
 
+        exitButton.setOnClickListener {
+            finish()
+        }
+
         // Controlla se il dispositivo esegue Android 11 o versioni successive
         configureSystemBarsAppearance()
 
@@ -90,10 +95,25 @@ class MainActivity : ComponentActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
             } else {
                 // Richiedi le autorizzazioni di posizione se non sono già state concesse
                 // (potresti voler gestire la spiegazione e la richiesta di autorizzazione come nel tuo codice esistente)
             }
+        }
+    }
+
+    private fun showOnMap() {
+        if (parkedLocation != null) {
+            // Se la posizione di parcheggio è disponibile, apri Google Maps con la posizione
+            saveLocationOnGoogleMaps(parkedLocation!!.latitude, parkedLocation!!.longitude)
+        } else {
+            // Se la posizione di parcheggio non è disponibile, mostra un messaggio all'utente
+            Toast.makeText(
+                this,
+                "Posizione di parcheggio non disponibile. Parcheggia prima di utilizzare questa opzione.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -158,6 +178,7 @@ class MainActivity : ComponentActivity() {
             // Aggiorna la posizione attuale dell'utente
             val latitude = location.latitude
             val longitude = location.longitude
+            Log.d("LocationListener", "Nuova posizione: $latitude, $longitude")
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -258,10 +279,10 @@ private fun showTimePickerDialog() {
         if (mapIntent.resolveActivity(packageManager) != null) {
             startActivity(mapIntent)
         } else {
-            // Handle the case where Google Maps is not installed on the device
+            // Gestisce il caso in cui Google Maps non è installato sul dispositivo
             Toast.makeText(
                 this,
-                "Google Maps is not installed on your device. Please install Google Maps to use this feature.",
+                "Google Maps non è installato sul tuo dispositivo. Installa Google Maps per utilizzare questa funzione.",
                 Toast.LENGTH_SHORT
             ).show()
         }
