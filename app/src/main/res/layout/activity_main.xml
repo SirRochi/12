@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="#0000FF"
     tools:context=".MainActivity">
 
     <!-- Altri elementi del layout -->
@@ -16,7 +17,10 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="#FFFFFF"
+
+        />
 
 
     <Button
@@ -30,6 +34,7 @@
         android:layout_marginTop="66dp"
         android:layout_marginEnd="199dp"
         android:layout_toStartOf="@+id/formatCheckBox"
+        android:backgroundTint="#FFFFFF"
 
         android:text="Imposta Durata" />
 
@@ -40,8 +45,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="190dp"
-        android:layout_marginEnd="234dp"
+        android:layout_marginTop="206dp"
+        android:layout_marginEnd="244dp"
+        android:background="#FFFFFF"
         android:checked="true"
         android:text="Formato 24 ore" />
 
@@ -49,6 +55,7 @@
         android:id="@+id/timeRemainingTextView"
         android:layout_width="175dp"
         android:layout_height="112dp"
+        android:background="#FFFFFF"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
@@ -65,7 +72,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="278dp"
         android:layout_marginEnd="230dp"
-        android:backgroundTint="#00FF00"
+        android:backgroundTint="#FFFFFF"
         android:text="Park Car" />
 
     <Button
@@ -76,8 +83,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="282dp"
         android:layout_marginEnd="11dp"
-        android:backgroundTint="#00FF00"
-
+        android:backgroundTint="#FFFFFF"
         android:text="Show on Map" />
 
     <Button
@@ -91,5 +97,5 @@
         android:layout_marginEnd="32dp"
         android:backgroundTint="#FFFFFF"
         android:text="Exit"
-        android:textColor="#FF0000" />
+         />
 </RelativeLayout>
