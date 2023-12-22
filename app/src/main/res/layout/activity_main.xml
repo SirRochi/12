@@ -40,13 +40,13 @@
 
     <CheckBox
         android:id="@+id/formatCheckBox"
-        android:layout_width="205dp"
-        android:layout_height="52dp"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="206dp"
-        android:layout_marginEnd="244dp"
+        android:layout_marginTop="217dp"
+        android:layout_marginEnd="194dp"
         android:background="#FFFFFF"
         android:checked="true"
         android:text="Formato 24 ore" />
@@ -62,40 +62,40 @@
         android:layout_marginTop="78dp"
         android:layout_marginEnd="1dp"
         android:text="Tempo rimanente: "
-         />
+        android:textStyle="bold" />
+
 
     <Button
         android:id="@+id/parkButton"
-        android:layout_width="216dp"
-        android:layout_height="114dp"
+        android:layout_width="205dp"
+        android:layout_height="98.75dp"
+        android:layout_alignEnd="@+id/showMapButton"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="278dp"
-        android:layout_marginEnd="230dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="221dp"
         android:backgroundTint="#FFFFFF"
         android:text="Park Car" />
 
     <Button
         android:id="@+id/showMapButton"
-        android:layout_width="204dp"
-        android:layout_height="120dp"
+        android:layout_width="205dp"
+        android:layout_height="98.75dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="282dp"
-        android:layout_marginEnd="11dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="10dp"
         android:backgroundTint="#FFFFFF"
         android:text="Show on Map" />
 
     <Button
         android:id="@+id/exitButton"
-        android:layout_width="389dp"
-        android:layout_height="115dp"
+        android:layout_width="385dp"
+        android:layout_height="129dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="442dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="413dp"
+        android:layout_marginEnd="10dp"
         android:backgroundTint="#FFFFFF"
-        android:text="Exit"
-         />
+        android:text="Exit" />
 </RelativeLayout>

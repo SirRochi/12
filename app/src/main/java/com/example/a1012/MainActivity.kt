@@ -30,7 +30,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var parkButton: Button
     private lateinit var exitButton: Button
     private lateinit var locationManager: LocationManager
-private lateinit var showMapButton: Button
     private var parkedLocation: Location? = null
     private var timer: CountDownTimer? = null
     private val LOCATION_PERMISSION_REQUEST_CODE = 0
@@ -52,7 +51,7 @@ private lateinit var showMapButton: Button
         parkButton = findViewById(R.id.parkButton)
         exitButton = findViewById(R.id.exitButton)
 
-
+        // Bottone per impostare la durata
         val durationButton: Button = findViewById(R.id.setDurationButton)
 
 
@@ -61,7 +60,7 @@ private lateinit var showMapButton: Button
 
         }
 
-
+        // Bottone per uscire dall'applicazione
         exitButton.setOnClickListener {
             finish()
         }
@@ -127,7 +126,7 @@ private lateinit var showMapButton: Button
         parkedLocation!!.latitude = latitude
         parkedLocation!!.longitude = longitude
 
-        // Puoi anche eseguire altre azioni necessarie relative al salvataggio della posizione
+
     }
 
 
@@ -144,7 +143,7 @@ private lateinit var showMapButton: Button
             if (mapIntent.resolveActivity(packageManager) != null) {
                 startActivity(mapIntent)
             } else {
-                // Handle the case where Google Maps is not installed on the device
+                // se Google Maps non è installato sul dispositivo
                 Toast.makeText(
                     this,
                     "Google Maps is not installed on your device. Install Google Maps to use this feature.",
@@ -152,7 +151,7 @@ private lateinit var showMapButton: Button
                 ).show()
             }
         } else {
-            // Handle the case where the location is not saved
+            //  se la posizione non è salvata
             Toast.makeText(
                 this,
                 "Location not saved. Please park your car first.",
@@ -269,7 +268,7 @@ private lateinit var showMapButton: Button
                 endTimeTextView.text = endTimeText
                 endTimeTextView.visibility = View.VISIBLE
 
-                // Store the selected time
+                // selziona ora
                 selectedHourOfDay = hourOfDay
                 selectedMinute = minute
             },
@@ -286,7 +285,7 @@ private lateinit var showMapButton: Button
 
 
     private fun showDialogWithExplanation() {
-        // Implement the code to show an explanation when requesting permissions
+
     }
 
     private fun startTimer(durationMillis: Int) {
