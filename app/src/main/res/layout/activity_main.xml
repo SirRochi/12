@@ -40,8 +40,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="226dp"
-        android:layout_marginEnd="206dp"
+        android:layout_marginTop="190dp"
+        android:layout_marginEnd="234dp"
         android:checked="true"
         android:text="Formato 24 ore" />
 
@@ -55,7 +55,7 @@
         android:layout_marginTop="78dp"
         android:layout_marginEnd="1dp"
         android:text="Tempo rimanente: "
-        android:visibility="invisible" />
+         />
 
     <Button
         android:id="@+id/parkButton"
@@ -63,8 +63,8 @@
         android:layout_height="114dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="326dp"
-        android:layout_marginEnd="199dp"
+        android:layout_marginTop="278dp"
+        android:layout_marginEnd="230dp"
         android:backgroundTint="#00FF00"
         android:text="Park Car" />
 
@@ -74,8 +74,8 @@
         android:layout_height="120dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="344dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginTop="282dp"
+        android:layout_marginEnd="11dp"
         android:backgroundTint="#00FF00"
 
         android:text="Show on Map" />
@@ -87,8 +87,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="536dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="442dp"
+        android:layout_marginEnd="32dp"
         android:backgroundTint="#FFFFFF"
         android:text="Exit"
         android:textColor="#FF0000" />
