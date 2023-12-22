@@ -30,11 +30,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var parkButton: Button
     private lateinit var exitButton: Button
     private lateinit var locationManager: LocationManager
+private lateinit var showMapButton: Button
     private var parkedLocation: Location? = null
     private var timer: CountDownTimer? = null
-    private val durationMillis: Long = 30 * 60 * 1000 // 30 minutes
     private val LOCATION_PERMISSION_REQUEST_CODE = 0
-    private val mainScope = MainScope()
     private var endTimeMillis: Long = 0
     private lateinit var endTimeTextView: TextView
     private var selectedHourOfDay: Int = 0
@@ -66,6 +65,12 @@ class MainActivity : ComponentActivity() {
         exitButton.setOnClickListener {
             finish()
         }
+        val showMapButton: Button = findViewById(R.id.showMapButton)
+
+        showMapButton.setOnClickListener {
+            showLocationOnMap()
+        }
+
 
         // Controlla se il dispositivo esegue Android 11 o versioni successive
         configureSystemBarsAppearance()
@@ -127,6 +132,8 @@ class MainActivity : ComponentActivity() {
 
 
     private fun showLocationOnMap() {
+        Log.d("MainActivity", "showLocationOnMap() called")
+
         if (parkedLocation != null) {
             val latitude = parkedLocation!!.latitude
             val longitude = parkedLocation!!.longitude
