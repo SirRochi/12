@@ -1,55 +1,95 @@
 <!-- File: res/layout/activity_main.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MainActivity">
 
     <!-- Altri elementi del layout -->
 
-    <Button
-        android:id="@+id/setDurationButton"
+    <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Imposta Durata"
-        android:layout_marginTop="16dp"/>
+        android:text="Disco Orario"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp" />
+
+
+    <Button
+        android:id="@+id/setDurationButton"
+        android:layout_width="194dp"
+        android:layout_height="124dp"
+        android:layout_below="@id/titleTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="start|bottom"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="199dp"
+        android:layout_toStartOf="@+id/formatCheckBox"
+
+        android:text="Imposta Durata" />
 
     <CheckBox
         android:id="@+id/formatCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Formato 24 ore"
-        android:checked="true" />
+        android:layout_width="205dp"
+        android:layout_height="52dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="start|bottom"
+        android:layout_marginTop="226dp"
+        android:layout_marginEnd="206dp"
+        android:checked="true"
+        android:text="Formato 24 ore" />
 
     <TextView
         android:id="@+id/timeRemainingTextView"
-        android:layout_width="163dp"
-        android:layout_height="96dp"
-        android:layout_gravity="end|top"
+        android:layout_width="175dp"
+        android:layout_height="112dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="start|bottom"
+        android:layout_marginTop="78dp"
+        android:layout_marginEnd="1dp"
         android:text="Tempo rimanente: "
         android:visibility="invisible" />
 
     <Button
         android:id="@+id/parkButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Park Car"
-        android:textColor="#00FF00" />
+        android:layout_width="216dp"
+        android:layout_height="114dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="326dp"
+        android:layout_marginEnd="199dp"
+        android:backgroundTint="#00FF00"
+        android:text="Park Car" />
 
     <Button
         android:id="@+id/showMapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="204dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="344dp"
+        android:layout_marginEnd="3dp"
+        android:backgroundTint="#00FF00"
+
         android:text="Show on Map" />
 
     <Button
         android:id="@+id/exitButton"
-        android:layout_width="394dp"
-        android:layout_height="91dp"
+        android:layout_width="389dp"
+        android:layout_height="115dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
+        android:layout_marginTop="536dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="#FFFFFF"
         android:text="Exit"
         android:textColor="#FF0000" />
-</LinearLayout>
+</RelativeLayout>
