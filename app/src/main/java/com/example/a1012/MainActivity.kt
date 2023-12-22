@@ -287,7 +287,7 @@ class MainActivity : ComponentActivity() {
     private fun showDialogWithExplanation() {
 
     }
-
+    // Avvia un timer
     private fun startTimer(durationMillis: Int) {
         if (timer == null) {
             endTimeMillis = System.currentTimeMillis() + durationMillis
@@ -306,19 +306,23 @@ class MainActivity : ComponentActivity() {
             }.start()
         }
     }
+    // Aggiorna l'interfaccia utente con il tempo rimanente durante il conteggio alla rovescia
     private fun updateUIWithRemainingTime(millisUntilFinished: Long) {
+        // Verifica se endTimeMillis è maggiore di zero, assicurandosi che il timer sia attivo
         if (endTimeMillis > 0) {
+            // Formatta il tempo rimanente nel formato HH:mm:ss utilizzando la funzione formatTime
             val remainingTime = formatTime(millisUntilFinished)
             endTimeTextView.text = "Tempo rimanente: $remainingTime"
             endTimeTextView.visibility = View.VISIBLE
         }
     }
-
+    // Converte il tempo in millisecondi nel formato HH:mm:ss
     private fun formatTime(millis: Long): String {
         val hours = TimeUnit.MILLISECONDS.toHours(millis)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(millis - TimeUnit.HOURS.toMillis(hours))
         val seconds =
             TimeUnit.MILLISECONDS.toSeconds(millis - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes))
+        // Restituisce una stringa formattata con due cifre per ore, minuti e secondi
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
