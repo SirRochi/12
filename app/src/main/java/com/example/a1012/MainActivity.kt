@@ -259,12 +259,17 @@ class MainActivity : ComponentActivity() {
                 // Calcola la durata in millisecondi
                 val selectedDuration = (hourOfDay * 60 + minute) * 60 * 1000
 
+                // Ferma il timer
+                timer?.cancel()
+
+               // Imposta la nuova durata
+                endTimeMillis = selectedDuration.toLong()
                 // Aggiorna il testo del pulsante con l'orario selezionato
-                val buttonText = String.format(Locale.getDefault(), "Durata: %02d:%02d", hourOfDay, minute)
+                val buttonText = String.format(Locale.getDefault(), "Duration: %02d:%02d", hourOfDay, minute)
                 setDurationButton.text = buttonText
 
                 // Aggiorna endTimeTextView con l'orario selezionato
-                val endTimeText = String.format(Locale.getDefault(), "Tempo rimanente: %02d:%02d", hourOfDay, minute)
+                val endTimeText = String.format(Locale.getDefault(), "Remaining time: %02d:%02d", hourOfDay, minute)
                 endTimeTextView.text = endTimeText
                 endTimeTextView.visibility = View.VISIBLE
 
@@ -278,7 +283,7 @@ class MainActivity : ComponentActivity() {
         )
 
         // Imposta il titolo per i minuti
-        timePickerDialog.setTitle("Seleziona Orario")
+        timePickerDialog.setTitle("Select Time")
 
         timePickerDialog.show()
     }
@@ -312,7 +317,7 @@ class MainActivity : ComponentActivity() {
         if (endTimeMillis > 0) {
             // Formatta il tempo rimanente nel formato HH:mm:ss utilizzando la funzione formatTime
             val remainingTime = formatTime(millisUntilFinished)
-            endTimeTextView.text = "Tempo rimanente: $remainingTime"
+            endTimeTextView.text = "Remaining time: $remainingTime"
             endTimeTextView.visibility = View.VISIBLE
         }
     }

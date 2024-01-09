@@ -1,23 +1,19 @@
-<!-- File: res/layout/activity_main.xml -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-
+    android:background="#87CEFA"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/backgroundImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/DiscoOrario.png" />
+
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Disco Orario"
+        android:text="Time Disc"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
@@ -29,8 +25,8 @@
 
     <Button
         android:id="@+id/setDurationButton"
-        android:layout_width="194dp"
-        android:layout_height="124dp"
+        android:layout_width="190dp"
+        android:layout_height="125dp"
         android:layout_below="@id/titleTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -40,66 +36,66 @@
         android:layout_toStartOf="@+id/formatCheckBox"
         android:backgroundTint="#FFFFFF"
 
-        android:text="Imposta Durata" />
+        android:text="Set Duration" />
+
 
     <CheckBox
         android:id="@+id/formatCheckBox"
-        android:layout_width="201dp"
-        android:layout_height="wrap_content"
+        android:layout_width="378dp"
+        android:layout_height="21dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="217dp"
-        android:layout_marginEnd="194dp"
+        android:layout_marginTop="194dp"
+        android:layout_marginEnd="17dp"
         android:background="#FFFFFF"
         android:checked="true"
-        android:text="Formato 24 ore" />
+        android:text="24 hour format" />
 
     <TextView
         android:id="@+id/timeRemainingTextView"
-        android:layout_width="175dp"
-        android:layout_height="112dp"
-        android:background="#FFFFFF"
+        android:layout_width="190dp"
+        android:layout_height="105dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="78dp"
-        android:layout_marginEnd="1dp"
-        android:text="Tempo rimanente: "
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="3dp"
+        android:background="#FFFFFF"
+        android:text="Remaining time: "
         android:textStyle="bold" />
-
 
     <Button
         android:id="@+id/parkButton"
-        android:layout_width="205dp"
-        android:layout_height="98.75dp"
-        android:layout_alignEnd="@+id/showMapButton"
+        android:layout_width="180dp"
+        android:layout_height="110dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="221dp"
+        android:layout_marginTop="254dp"
+        android:layout_marginEnd="1dp"
+        android:layout_toStartOf="@+id/showMapButton"
         android:backgroundTint="#FFFFFF"
         android:text="Park Car" />
 
     <Button
         android:id="@+id/showMapButton"
-        android:layout_width="205dp"
-        android:layout_height="98.75dp"
+        android:layout_width="216dp"
+        android:layout_height="110dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="262dp"
+        android:layout_marginEnd="-10dp"
         android:backgroundTint="#FFFFFF"
         android:text="Show on Map" />
 
     <Button
         android:id="@+id/exitButton"
-        android:layout_width="385dp"
-        android:layout_height="129dp"
+        android:layout_width="394dp"
+        android:layout_height="152dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="start|bottom"
-        android:layout_marginTop="413dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="384dp"
+        android:layout_marginEnd="1dp"
         android:backgroundTint="#FFFFFF"
         android:text="Exit" />
 </RelativeLayout>
