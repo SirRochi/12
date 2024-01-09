@@ -96,6 +96,8 @@ class MainActivity : ComponentActivity() {
                     // Salva la posizione senza aprire Google Maps
                     saveLocationWithoutOpeningMap(lastKnownLocation.latitude, lastKnownLocation.longitude)
 
+                    // Ferma il timer attuale, se presente
+                    timer?.cancel()
 
                     // Avvia il timer con una durata predefinita
                     Log.d("MainActivity", "Before startTimer call")
@@ -294,23 +296,29 @@ class MainActivity : ComponentActivity() {
     }
     // Avvia un timer
     private fun startTimer(durationMillis: Int) {
-        if (timer == null) {
-            endTimeMillis = System.currentTimeMillis() + durationMillis
+        Log.d("MainActivity", "startTimer: Duration = $durationMillis")
+        endTimeMillis = System.currentTimeMillis() + durationMillis
 
-            timer = object : CountDownTimer(durationMillis.toLong(), 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    updateUIWithRemainingTime(millisUntilFinished)
-                }
+        timer?.cancel()  // Interrompe il timer attuale se è in esecuzione
 
-                override fun onFinish() {
-                    // Nascondi la textView del tempo rimanente
-                    endTimeTextView.visibility = View.INVISIBLE
-                    // Resetta endTimeMillis
-                    endTimeMillis = 0
-                }
-            }.start()
-        }
+        timer = object : CountDownTimer(durationMillis.toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateUIWithRemainingTime(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                // Nascondi la textView del tempo rimanente
+                endTimeTextView.visibility = View.INVISIBLE
+                // Resetta endTimeMillis
+                endTimeMillis = 0
+                timer = null
+                Log.d("MainActivity", "Timer onFinish")
+            }
+        }.start()
+
+        Log.d("MainActivity", "Timer started")
     }
+
     // Aggiorna l'interfaccia utente con il tempo rimanente durante il conteggio alla rovescia
     private fun updateUIWithRemainingTime(millisUntilFinished: Long) {
         // Verifica se endTimeMillis è maggiore di zero, assicurandosi che il timer sia attivo
