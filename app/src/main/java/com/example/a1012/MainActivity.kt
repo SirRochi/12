@@ -40,12 +40,12 @@ class MainActivity : ComponentActivity() {
 
 
 
-
+// metodo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inizializzazione di endTimeTextView
+        // Inizializzazione dei bottoni
         endTimeTextView = findViewById(R.id.timeRemainingTextView)
 
         parkButton = findViewById(R.id.parkButton)
@@ -59,19 +59,20 @@ class MainActivity : ComponentActivity() {
             showTimePickerDialog()
 
         }
-
+// ascoltatori
         // Bottone per uscire dall'applicazione
         exitButton.setOnClickListener {
             finish()
         }
-        val showMapButton: Button = findViewById(R.id.showMapButton)
 
+        val showMapButton: Button = findViewById(R.id.showMapButton)
         showMapButton.setOnClickListener {
             showLocationOnMap()
         }
 
 
-        // Controlla se il dispositivo esegue Android 11 o versioni successive
+
+        // barra di siste,a
         configureSystemBarsAppearance()
 
         // Inizializza le altre variabili
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
 
 
-        // Corretta posizione di PARK BOTTON.setOnClickListener
+        // Corretta posizione di PARK BOTTON
         parkButton.setOnClickListener {
             // Controlla se è stata concessa l'autorizzazione alla posizione
             if (ActivityCompat.checkSelfPermission(
@@ -164,7 +165,7 @@ class MainActivity : ComponentActivity() {
 
 
 
-
+//barra di sistema
     private fun configureSystemBarsAppearance() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(
